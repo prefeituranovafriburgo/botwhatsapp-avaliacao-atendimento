@@ -57,7 +57,6 @@ function start(client) {
         ) {
             const respostaCliente = message.body.trim(); // tira espaços de início e fim
             const nome = message.sender.pushname;
-            console.log(`Mensagem recebida de ${nome} (${numeroCliente}): ${respostaCliente}`);
             let resposta;
 
             switch (respostaCliente) {
