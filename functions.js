@@ -15,7 +15,12 @@ function formatarNumero(numero) {
     return numero.replace(/\D/g, "");
 }
 
-export async function salvarAvalicao(telefone, avaliacao) {
+function formataNome(nome) {
+    // Remove caracteres não alfanuméricos e formata o nome
+    return nome.replace(/[^a-zA-ZÀ-ÿ\s]/g, "").trim();
+}
+
+export async function salvarAvalicao(nome, telefone, avaliacao) {
     const conexao = await mysql.createConnection({
         host: dbConfig.host,
         user: dbConfig.user,
@@ -26,9 +31,10 @@ export async function salvarAvalicao(telefone, avaliacao) {
 
     try {
         const query =
-            "INSERT INTO botwhatsapp_avaliacaoatendimento (telefone, avaliacao) VALUES (?, ?)";
+            "INSERT INTO botwhatsapp_avaliacaoatendimento (nome, telefone, avaliacao) VALUES (?, ?, ?)";
         const telefone_formatado = formatarNumero(telefone);
-        await conexao.execute(query, [telefone_formatado, avaliacao]);
+        const nome_formatado = formataNome(nome);
+        await conexao.execute(query, [nome_formatado, telefone_formatado, avaliacao]);
     } catch (erro) {
         console.error("Erro ao inserir:", erro.message);
     } finally {

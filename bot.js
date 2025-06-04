@@ -66,7 +66,7 @@ function start(client) {
                         "✅ *Agradecemos pela sua avaliação!*\n\nFicamos satisfeitos em saber que sua experiência foi positiva. Estamos sempre à disposição para atendê-lo da melhor forma possível.";
                     is_avaliado = true; // marca que já avaliou
                     is_avisado = false; // reset após avaliação
-                    salvarAvalicao(numeroCliente, 1);
+                    salvarAvalicao(nome, numeroCliente, 1);
                     break;
 
                 case "2":
@@ -74,7 +74,7 @@ function start(client) {
                         "✅ *Agradecemos pela sua avaliação!*\n\nEstamos continuamente empenhados em aprimorar nossos serviços para melhor atendê-lo.";
                     is_avaliado = true;
                     is_avisado = false;
-                    salvarAvalicao(numeroCliente, 2);
+                    salvarAvalicao(nome, numeroCliente, 2);
                     break;
 
                 case "3":
@@ -82,7 +82,7 @@ function start(client) {
                         "⚠️ *Lamentamos que sua experiência não tenha sido satisfatória.*\n\nValorizamos o seu feedback e estamos à disposição para entender melhor o ocorrido e buscar melhorias.";
                     is_avaliado = true;
                     is_avisado = false;
-                    salvarAvalicao(numeroCliente, 3);
+                    salvarAvalicao(nome, numeroCliente, 3);
                     break;
 
                 default:
