@@ -42,7 +42,7 @@ function start(client) {
 
                 await client.sendText(
                     numero,
-                    "🏛️ *Prefeitura de Nova Friburgo* 🏛️\n\nAgradecemos o seu contato.\nPara aperfeiçoarmos continuamente a qualidade dos nossos serviços, nos ajude com sua opinião sobre o atendimento recebido.\n\n📋 *Pesquisa de Satisfação - Atendimento* 📋\n\nPor gentileza, informe o número correspondente à sua percepção:\n\n1️⃣ *Satisfeito*\n2️⃣ *Neutro*\n3️⃣ *Insatisfeito*\n\nA sua avaliação é fundamental para o nosso processo de melhoria contínua.\nDesde já, agradecemos!"
+                    "🏛️ *Prefeitura Municipal de Nova Friburgo* 🏛️\n\nPara aperfeiçoarmos continuamente a qualidade dos nossos serviços, nos ajude com sua opinião sobre o atendimento recebido.\n\n📋 *Pesquisa de Satisfação - Atendimento* 📋\n\nPor gentileza, informe o número correspondente à sua percepção:\n\n1️⃣ *Satisfeito*\n2️⃣ *Neutro*\n3️⃣ *Insatisfeito*\n\nA sua avaliação é fundamental para o nosso processo de melhoria contínua.\nDesde já, agradecemos!"
                 );
 
                 clientes[numero].is_avisado = true;
@@ -104,7 +104,7 @@ function start(client) {
                 estado.nome = message.sender.pushname || "Usuário";
                 const respostaCliente = message.body.trim();
                 let resposta;
-                resposta = "✅ *Sua avaliação foi armazenada com sucesso!.*\nEstamos sempre à disposição para atendê-lo da melhor forma possível.\n\nAgradecemos pela sua participação! 🙏\n\nCaso tenha mais alguma dúvida ou precise de ajuda, não hesite em nos contatar novamente.\n\n🏛️ *Prefeitura de Nova Friburgo* 🏛️";
+                resposta = "✅ *Sua avaliação foi armazenada com sucesso!.*\nEstamos sempre à disposição para atendê-lo da melhor forma possível.\n\nAgradecemos pela sua participação! 🙏\n\nCaso tenha mais alguma dúvida ou precise de ajuda, não hesite em nos contatar novamente.\n\n🏛️ *Prefeitura Municipal de Nova Friburgo* 🏛️";
                 salvarAvalicao(estado.nome, numero, estado.nota_avaliacao, respostaCliente);
 
                 await client.sendText(numero, resposta);
