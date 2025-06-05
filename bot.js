@@ -13,15 +13,16 @@ venom
         console.log(erro);
     });
 
-let is_avaliado;
-let is_avisado;
-let numeroCliente;
+// Objeto para armazenar o estado de cada cliente
+const clientes = {};
 
 function start(client) {
     let ultimaMensagemId = null;
 
     try {
         client.onAnyMessage(async (message) => {
+            // Identifica o número do cliente (pode ser message.to ou message.from dependendo do contexto)
+            const numero = message.to;
             if (
                 message.fromMe &&
                 (message.body.toLowerCase().trim() === "atendimento encerrado!" ||
@@ -30,17 +31,21 @@ function start(client) {
                 message.body.toLowerCase().trim() === "finalizando atendimento!") &&
                 message.id !== ultimaMensagemId
             ){
-                is_avaliado = false; // reset após encerramento
-                is_avisado = false; // reset após encerramento
-                numeroCliente = message.to; // pega o número do cliente a partir da mensagem recebida
-                ultimaMensagemId = message.id; // salva o ID para não repetir
+                // Inicializa ou reseta o estado do cliente
+                clientes[numero] = {
+                    is_avaliado: false,
+                    is_avisado: false,
+                    nota_avaliacao: null,
+                    nome: null
+                };
+                ultimaMensagemId = message.id;
 
                 await client.sendText(
-                    numeroCliente,
-                    "🏛️ *Prefeitura de Nova Friburgo* 🏛️\n\nAgradecemos o seu contato.\nPara aperfeiçoarmos continuamente a qualidade dos nossos serviços, nos ajude com sua opinião sobre o atendimento recebido.\n\n📋 *Pesquisa de Satisfação - Atendimento* 📋\n\nPor gentileza, informe o número correspondente à sua percepção:\n\n1️⃣ *Satisfeito*\n2️⃣ *Neutro*\n3️⃣ *Insatisfeito*\n\nA sua avaliação é fundamental para o nosso processo de melhoria contínua.\nAgradecemos pela sua participação. ✅"
+                    numero,
+                    "🏛️ *Prefeitura de Nova Friburgo* 🏛️\n\nAgradecemos o seu contato.\nPara aperfeiçoarmos continuamente a qualidade dos nossos serviços, nos ajude com sua opinião sobre o atendimento recebido.\n\n📋 *Pesquisa de Satisfação - Atendimento* 📋\n\nPor gentileza, informe o número correspondente à sua percepção:\n\n1️⃣ *Satisfeito*\n2️⃣ *Neutro*\n3️⃣ *Insatisfeito*\n\nA sua avaliação é fundamental para o nosso processo de melhoria contínua.\nDesde já, Obrigado!"
                 );
 
-                is_avisado = true; // Marca que já enviou a avaliação
+                clientes[numero].is_avisado = true;
             }
         });
 
@@ -49,47 +54,72 @@ function start(client) {
     }
 
     client.onMessage(async (message) => {
-        if (
-            is_avaliado === false &&
-            is_avisado === true &&
-            !message.fromMe &&
-            message.from === numeroCliente
-        ) {
-            const respostaCliente = message.body.trim(); // tira espaços de início e fim
-            const nome = message.sender.pushname;
-            let resposta;
+        try {
+            const numero = message.from;
+            // Garante que o estado do cliente existe
+            if (!clientes[numero]) return;
+            const estado = clientes[numero];
 
-            switch (respostaCliente) {
-                case "1":
-                    resposta =
-                        "✅ *Agradecemos pela sua avaliação!*\n\nFicamos satisfeitos em saber que sua experiência foi positiva. Estamos sempre à disposição para atendê-lo da melhor forma possível.";
-                    is_avaliado = true; // marca que já avaliou
-                    is_avisado = false; // reset após avaliação
-                    salvarAvalicao(nome, numeroCliente, 1);
-                    break;
+            if (
+                estado.is_avaliado === false &&
+                estado.is_avisado === true &&
+                !message.fromMe
+            ) {
+                const respostaCliente = message.body.trim();
+                let resposta;
+                switch (respostaCliente) {
+                    case "1":
+                        resposta =
+                            "✅ *Avaliação positiva!*\nFicamos felizes em saber que sua experiência foi satisfatória.\nPor favor, para finalizar o registro da sua avaliação, nos conte o que mais gostou no nosso atendimento! Isso nos ajuda a continuar oferecendo um serviço de qualidade.";
+                        estado.is_avaliado = true;
+                        estado.nota_avaliacao = 1;
+                        break;
 
-                case "2":
-                    resposta =
-                        "✅ *Agradecemos pela sua avaliação!*\n\nEstamos continuamente empenhados em aprimorar nossos serviços para melhor atendê-lo.";
-                    is_avaliado = true;
-                    is_avisado = false;
-                    salvarAvalicao(nome, numeroCliente, 2);
-                    break;
+                    case "2":
+                        resposta =
+                            "✅ *Avaliação neutra!*\nEstamos sempre em busca de melhorias.\nPor favor, para finalizar o registro da sua avaliação, nos conte o que podemos aperfeiçoar no atendimento! Seu feedback nos ajuda a melhorar nossos serviços.";
+                        estado.is_avaliado = true;
+                        estado.nota_avaliacao = 2;
+                        break;
 
-                case "3":
-                    resposta =
-                        "⚠️ *Lamentamos que sua experiência não tenha sido satisfatória.*\n\nValorizamos o seu feedback e estamos à disposição para entender melhor o ocorrido e buscar melhorias.";
-                    is_avaliado = true;
-                    is_avisado = false;
-                    salvarAvalicao(nome, numeroCliente, 3);
-                    break;
+                    case "3":
+                        resposta =
+                            "⚠️ *Avaliação negativa. Lamentamos que sua experiência não tenha sido positiva.*\nPor favor, para finalizar o registro da sua avaliação e entender melhor o ocorrido, poderia nos explicar o que aconteceu? Seu relato é fundamental para melhorarmos nosso atendimento.";
+                        estado.is_avaliado = true;
+                        estado.nota_avaliacao = 3;
+                        break;
 
-                default:
-                    resposta =
-                        "⚠️ *Opção inválida.*\nPor gentileza, responda com um dos números a seguir:\n\n1️⃣ Satisfeito\n2️⃣ Neutro\n3️⃣ Insatisfeito";
+                    default:
+                        resposta =
+                            "⚠️ *Opção inválida.*\nPor gentileza, responda com um dos números a seguir:\n\n1️⃣ Satisfeito\n2️⃣ Neutro\n3️⃣ Insatisfeito\n Assim, podemos proceder com o registro da sua avaliação.";
+                }
+
+                await client.sendText(numero, resposta);
+                
+            } else if (
+                estado.is_avaliado === true &&
+                estado.is_avisado === true &&
+                !message.fromMe
+            ) {
+                estado.nome = message.sender.pushname || "Usuário";
+                const respostaCliente = message.body.trim();
+                let resposta;
+                resposta = "✅ *Sua avaliação foi armazenada com sucesso!.*\nEstamos sempre à disposição para atendê-lo da melhor forma possível.\n\nAgradecemos pela sua participação! 🙏\n\nCaso tenha mais alguma dúvida ou precise de ajuda, não hesite em nos contatar novamente.\n\n🏛️ *Prefeitura de Nova Friburgo* 🏛️";
+                salvarAvalicao(estado.nome, numero, estado.nota_avaliacao, respostaCliente);
+
+                await client.sendText(numero, resposta);
+
+                // Reseta o estado do cliente após finalizar
+                clientes[numero] = {
+                    is_avaliado: false,
+                    is_avisado: false,
+                    nota_avaliacao: null,
+                    nome: null
+                };
             }
 
-            await client.sendText(numeroCliente, resposta);
+        } catch (error) {
+            console.error("Erro ao processar a mensagem:", error);
         }
     });
 }

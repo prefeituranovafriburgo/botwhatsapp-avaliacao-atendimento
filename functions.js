@@ -20,7 +20,7 @@ function formataNome(nome) {
     return nome.replace(/[^a-zA-ZÀ-ÿ\s]/g, "").trim();
 }
 
-export async function salvarAvalicao(nome, telefone, avaliacao) {
+export async function salvarAvalicao(nome, telefone, avaliacao, detalhamento) {
     const conexao = await mysql.createConnection({
         host: dbConfig.host,
         user: dbConfig.user,
@@ -31,10 +31,10 @@ export async function salvarAvalicao(nome, telefone, avaliacao) {
 
     try {
         const query =
-            "INSERT INTO botwhatsapp_avaliacaoatendimento (nome, telefone, avaliacao) VALUES (?, ?, ?)";
+            "INSERT INTO botwhatsapp_avaliacaoatendimento (nome, telefone, avaliacao, detalhamento) VALUES (?, ?, ?, ?)";
         const telefone_formatado = formatarNumero(telefone);
         const nome_formatado = formataNome(nome);
-        await conexao.execute(query, [nome_formatado, telefone_formatado, avaliacao]);
+        await conexao.execute(query, [nome_formatado, telefone_formatado, avaliacao, detalhamento]);
     } catch (erro) {
         console.error("Erro ao inserir:", erro.message);
     } finally {
