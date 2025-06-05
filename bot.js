@@ -42,7 +42,7 @@ function start(client) {
 
                 await client.sendText(
                     numero,
-                    "🏛️ *Prefeitura de Nova Friburgo* 🏛️\n\nAgradecemos o seu contato.\nPara aperfeiçoarmos continuamente a qualidade dos nossos serviços, nos ajude com sua opinião sobre o atendimento recebido.\n\n📋 *Pesquisa de Satisfação - Atendimento* 📋\n\nPor gentileza, informe o número correspondente à sua percepção:\n\n1️⃣ *Satisfeito*\n2️⃣ *Neutro*\n3️⃣ *Insatisfeito*\n\nA sua avaliação é fundamental para o nosso processo de melhoria contínua.\nDesde já, Obrigado!"
+                    "🏛️ *Prefeitura de Nova Friburgo* 🏛️\n\nAgradecemos o seu contato.\nPara aperfeiçoarmos continuamente a qualidade dos nossos serviços, nos ajude com sua opinião sobre o atendimento recebido.\n\n📋 *Pesquisa de Satisfação - Atendimento* 📋\n\nPor gentileza, informe o número correspondente à sua percepção:\n\n1️⃣ *Satisfeito*\n2️⃣ *Neutro*\n3️⃣ *Insatisfeito*\n\nA sua avaliação é fundamental para o nosso processo de melhoria contínua.\nDesde já, agradecemos!"
                 );
 
                 clientes[numero].is_avisado = true;
@@ -70,21 +70,21 @@ function start(client) {
                 switch (respostaCliente) {
                     case "1":
                         resposta =
-                            "✅ *Avaliação positiva!*\nFicamos felizes em saber que sua experiência foi satisfatória.\nPor favor, para finalizar o registro da sua avaliação, nos conte o que mais gostou no nosso atendimento! Isso nos ajuda a continuar oferecendo um serviço de qualidade.";
+                            "❇️ *Avaliação positiva!*\nFicamos felizes em saber que sua experiência foi satisfatória.\nPor favor, para finalizar o registro da sua avaliação, nos conte o que mais gostou no nosso atendimento! Isso nos ajuda a continuar oferecendo um serviço de qualidade.";
                         estado.is_avaliado = true;
                         estado.nota_avaliacao = 1;
                         break;
 
                     case "2":
                         resposta =
-                            "✅ *Avaliação neutra!*\nEstamos sempre em busca de melhorias.\nPor favor, para finalizar o registro da sua avaliação, nos conte o que podemos aperfeiçoar no atendimento! Seu feedback nos ajuda a melhorar nossos serviços.";
+                            "⚠️ *Avaliação neutra!*\nEstamos sempre em busca de melhorias.\nPor favor, para finalizar o registro da sua avaliação, nos conte o que podemos aperfeiçoar no atendimento! Seu feedback nos ajuda a melhorar nossos serviços.";
                         estado.is_avaliado = true;
                         estado.nota_avaliacao = 2;
                         break;
 
                     case "3":
                         resposta =
-                            "⚠️ *Avaliação negativa. Lamentamos que sua experiência não tenha sido positiva.*\nPor favor, para finalizar o registro da sua avaliação e entender melhor o ocorrido, poderia nos explicar o que aconteceu? Seu relato é fundamental para melhorarmos nosso atendimento.";
+                            "‼️ *Avaliação negativa. Lamentamos que sua experiência não tenha sido positiva.*\nPor favor, para finalizar o registro da sua avaliação e entender melhor o ocorrido, poderia nos explicar o que aconteceu? Seu relato é fundamental para melhorarmos nosso atendimento.";
                         estado.is_avaliado = true;
                         estado.nota_avaliacao = 3;
                         break;
