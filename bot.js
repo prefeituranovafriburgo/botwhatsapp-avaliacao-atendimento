@@ -4,9 +4,16 @@ import venom from "venom-bot";
 venom
     .create({
         session: "avaliacao-atendimento", // Nome da sessão
+        headless: true, // Executa o bot em modo headless que é mais rápido e não abre uma janela do navegador
         browserArgs: [
-            "--headless=new", // <-- aqui você passa a flag que força o novo modo headless
-            "--no-sandbox"
+               "--headless",
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-accelerated-2d-canvas",
+                "--no-zygote",
+                "--single-process"
         ],
     })
     .then((client) => start(client))
