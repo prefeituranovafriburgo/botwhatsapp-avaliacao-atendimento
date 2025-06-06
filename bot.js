@@ -4,16 +4,16 @@ import venom from "venom-bot";
 venom
     .create({
         session: "avaliacao-atendimento", // Nome da sessão
-        headless: true, // Executa o bot em modo headless que é mais rápido e não abre uma janela do navegador
+        headless: "new", // Executa o bot em modo headless que é mais rápido e não abre uma janela do navegador
         browserArgs: [
-               "--headless",
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--disable-accelerated-2d-canvas",
-                "--no-zygote",
-                "--single-process"
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--disable-accelerated-2d-canvas",
+            "--no-zygote",
+            "--single-process",
+            "--headless=new"
         ],
     })
     .then((client) => start(client))
