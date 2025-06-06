@@ -6,6 +6,7 @@ venom
         session: "avaliacao-atendimento", // Nome da sessão
         browserArgs: [
             "--headless=new", // <-- aqui você passa a flag que força o novo modo headless
+            "--no-sandbox"
         ],
     })
     .then((client) => start(client))
