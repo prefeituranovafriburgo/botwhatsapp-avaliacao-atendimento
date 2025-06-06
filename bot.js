@@ -12,8 +12,7 @@ venom
             "--disable-gpu",
             "--disable-accelerated-2d-canvas",
             "--no-zygote",
-            "--single-process",
-            "--headless=new"
+            "--single-process"
         ],
     })
     .then((client) => start(client))
