@@ -29,12 +29,14 @@ export async function salvarAvalicao(nome, telefone, avaliacao, detalhamento) {
         port: dbConfig.port,
     });
 
+    const data = new Date().toISOString().slice(0, 19).replace("T", " "); // Formata a data para o formato 'YYYY-MM-DD HH:MM:SS'
+
     try {
         const query =
-            "INSERT INTO botwhatsapp_avaliacaoatendimento (nome, telefone, avaliacao, detalhamento) VALUES (?, ?, ?, ?)";
+            "INSERT INTO botwhatsapp_avaliacaoatendimento (nome, telefone, avaliacao, detalhamento, data) VALUES (?, ?, ?, ?, ?)";
         const telefone_formatado = formatarNumero(telefone);
         const nome_formatado = formataNome(nome);
-        await conexao.execute(query, [nome_formatado, telefone_formatado, avaliacao, detalhamento]);
+        await conexao.execute(query, [nome_formatado, telefone_formatado, avaliacao, detalhamento, data]);
     } catch (erro) {
         console.error("Erro ao inserir:", erro.message);
     } finally {
